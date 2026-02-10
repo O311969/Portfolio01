@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanna Begic Portfolio</title>
+<style>
+
+/* ===== GLOBAL STYLES ===== */
+body {
+  /* BACKGROUND IMAGE ADDED HERE */
+  background-image: url('backgroundpic.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  background-color: #000; 
+  
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  /* PREVENT SELECTION */
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ===== HEADER / NAVIGATION ===== */
+header {
+  width: 100%;
+  padding: 30px 50px; 
+  display: flex;
+  justify-content: flex-end; 
+  box-sizing: border-box;
+  position: absolute; 
+  top: 0;
+  right: 0;
+}
+
+.menu-links {
+  display: flex;
+  gap: 40px; 
+}
+
+.menu-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem; 
+  font-weight: 700;
+  letter-spacing: 0px;
+  transition: all 0.3s ease-in-out;
+  display: inline-block;
+}
+
+.menu-links a:hover {
+  letter-spacing: 1px; 
+  text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff; 
+  transform: scale(1.05); 
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 180px 50px 0; 
+}
+
+.title-container {
+  display: flex;
+  align-items: flex-end; 
+  width: 100%;
+  gap: 15px; 
+}
+
+.text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.sub-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: none;
+  margin-bottom: 2px;
+  margin-left: 17px;
+}
+
+.main-title {
+  font-size: 4rem;
+  font-weight: 900; 
+  margin: 0;
+  line-height: 0.9;
+  white-space: nowrap;
+}
+
+.header-line {
+  flex-grow: 1; 
+  height: 3px;  
+  background: #fff;
+  margin-bottom: 8px; 
+}
+
+.about-text {
+  margin-top: 100px;
+  max-width: 445px;
+  margin-left: auto; 
+  text-align: justify;
+  line-height: 1.55;
+  font-size: 1.1rem;
+}
+
+/* ===== INFINITE ART SCROLLER ===== */
+.art-scroller {
+  margin-top: 150px;
+  margin-bottom: 50px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.art-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: scroll-left 80s linear infinite;
+}
+
+.art-item {
+  width: 400px;
+  height: 400px;
+  background: #222; 
+  flex-shrink: 0;
+}
+
+.art-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none; /* Prevents dragging images off the page */
+}
+
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ===== FOOTER LINE ===== */
+.bottom-line {
+  width: 100%;     
+  height: 2px;     
+  background: #fff;  
+  margin-bottom: 50px;
+}
+
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+  <header>
+    <nav class="menu-links">
+      <a href="index.html">Home</a>
+      <a href="aboutmetab.html">About Me</a>
+      <a href="codeprojects.html">Projects</a>
+    </nav>
+  </header>
+
+<main>
+  <div class="title-container">
+    <div class="text-wrapper">
+      <span class="sub-title">Hanna's</span>
+      <h2 class="main-title">ART CORNER</h2>
+    </div>
+    <div class="header-line"></div>
+  </div>
+
+<p class="about-text">
+I’ve loved drawing for as long as I can remember, developing a style inspired by Japanese animation with a focus on expressive lines and character design. I’ve done commissions creating original characters and designs for others, usually sticking to line work while I continue practicing coloring. My art is all about growth, experimentation, and bringing characters to life.
+</p>
+</main>
+
+<div class="art-scroller">
+  <div class="art-track">
+    <div class="art-item"><img src="art_4.png" alt="Art 4"></div>
+    <div class="art-item"><img src="art_2.png" alt="Art 2"></div>
+    <div class="art-item"><img src="art_3.png" alt="Art 3"></div>
+    <div class="art-item"><img src="art_1.png" alt="Art 1"></div>
+    <div class="art-item"><img src="art_19.png" alt="Art 19"></div>
+    <div class="art-item"><img src="art_20.png" alt="Art 20"></div>
+    <div class="art-item"><img src="art_15.png" alt="Art 15"></div>
+    <div class="art-item"><img src="art_7.png" alt="Art 7"></div>
+    <div class="art-item"><img src="art_17.png" alt="Art 17"></div>
+    <div class="art-item"><img src="art_8.png" alt="Art 8"></div>
+    <div class="art-item"><img src="art_6.png" alt="Art 6"></div>
+    <div class="art-item"><img src="art_9.jpeg" alt="Art 9"></div>
+    <div class="art-item"><img src="art_10.jpeg" alt="Art 10"></div>
+    <div class="art-item"><img src="art_11.jpeg" alt="Art 11"></div>
+    <div class="art-item"><img src="art_13.png" alt="Art 13"></div>
+    <div class="art-item"><img src="art_14.png" alt="Art 14"></div>
+    <div class="art-item"><img src="art_5.png" alt="Art 5"></div>
+    <div class="art-item"><img src="art_16.png" alt="Art 16"></div>
+    <div class="art-item"><img src="art_12.png" alt="Art 12"></div>
+    <div class="art-item"><img src="art_18.png" alt="Art 18"></div>
+    <div class="art-item"><img src="art_21.jpeg" alt="Art 21"></div>
+
+    <div class="art-item"><img src="art_4.png" alt="Art 4"></div>
+    <div class="art-item"><img src="art_2.png" alt="Art 2"></div>
+    <div class="art-item"><img src="art_3.png" alt="Art 3"></div>
+    <div class="art-item"><img src="art_1.png" alt="Art 1"></div>
+    <div class="art-item"><img src="art_19.png" alt="Art 19"></div>
+    <div class="art-item"><img src="art_20.png" alt="Art 20"></div>
+    <div class="art-item"><img src="art_15.png" alt="Art 15"></div>
+    <div class="art-item"><img src="art_7.png" alt="Art 7"></div>
+    <div class="art-item"><img src="art_17.png" alt="Art 17"></div>
+    <div class="art-item"><img src="art_8.png" alt="Art 8"></div>
+    <div class="art-item"><img src="art_6.png" alt="Art 6"></div>
+    <div class="art-item"><img src="art_9.jpeg" alt="Art 9"></div>
+    <div class="art-item"><img src="art_10.jpeg" alt="Art 10"></div>
+    <div class="art-item"><img src="art_11.jpeg" alt="Art 11"></div>
+    <div class="art-item"><img src="art_13.png" alt="Art 13"></div>
+    <div class="art-item"><img src="art_14.png" alt="Art 14"></div>
+    <div class="art-item"><img src="art_5.png" alt="Art 5"></div>
+    <div class="art-item"><img src="art_16.png" alt="Art 16"></div>
+    <div class="art-item"><img src="art_12.png" alt="Art 12"></div>
+    <div class="art-item"><img src="art_18.png" alt="Art 18"></div>
+    <div class="art-item"><img src="art_21.jpeg" alt="Art 21"></div>
+  </div>
+</div>
+
+<div class="bottom-line"></div>
+
+<script>
+/* --- BLOCK COPY/PASTE/CUT --- */
+document.addEventListener('copy', (e) => e.preventDefault());
+document.addEventListener('paste', (e) => e.preventDefault());
+document.addEventListener('cut', (e) => e.preventDefault());
+
+/* --- Smooth Custom Scroll --- */
+let currentScroll = window.scrollY;
+let targetScroll = currentScroll;
+let isTicking = false;
+
+const SCROLL_SPEED = 0.07;      
+const WHEEL_MULTIPLIER = 0.85;  
+
+function getMaxScroll() {
+  return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+}
+
+window.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    targetScroll += e.deltaY * WHEEL_MULTIPLIER;
+    const maxScroll = getMaxScroll();
+    targetScroll = Math.min(Math.max(0, targetScroll), maxScroll);
+    if (!isTicking) smoothScroll();
+  },
+  { passive: false }
+);
+
+function smoothScroll() {
+  isTicking = true;
+  currentScroll += (targetScroll - currentScroll) * SCROLL_SPEED;
+  window.scrollTo(0, currentScroll);
+
+  if (Math.abs(targetScroll - currentScroll) > 0.5) {
+    requestAnimationFrame(smoothScroll);
+  } else {
+    currentScroll = targetScroll;
+    isTicking = false;
+  }
+}
+
+window.onbeforeunload = function () { window.scrollTo(0, 0); }
+
+if (history.scrollRestoration) {
+  history.scrollRestoration = 'manual';
+}
+</script>
+
+</body>
+</html>

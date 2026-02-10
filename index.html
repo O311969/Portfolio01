@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+
+<style>
+  /* ===== GLOBAL ===== */
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0);
+    font-family: sans-serif;
+    overflow: hidden;
+
+    background-image: url('backgroundpic.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+    
+    /* PREVENT SELECTION */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none;     /* IE 10 and 11 */
+    user-select: none;         /* Standard syntax */
+  }
+
+  /* ===== CONTAINER (Main Site) ===== */
+  #container {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: blur(10px); 
+    transition: filter 1s ease;
+
+    background-color: transparent;
+  }
+
+  #container.dragging { cursor: grabbing; }
+
+  /* ===== DRAGGABLE IMAGE WRAPPER ===== */
+#imageWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  will-change: transform;
+}
+
+#image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  pointer-events: none;
+}
+
+.follow {
+  position: absolute;
+  /* Positions the center of the container at the offset */
+  left: calc(50% + var(--ox, 0px));
+  top: calc(50% + var(--oy, 0px));
+  transform: translate(-50%, -50%);
+  
+  display: flex; 
+  pointer-events: none;
+}
+
+.follow-img {
+  width: auto;
+  height: auto;
+  max-width: 850px;
+  
+  object-fit: contain;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.follow-img:hover { transform: scale(1.04); }
+#btnInfo .follow-img { width: 570px; }
+#btn00 .follow-img   { width: 250px; }
+#btnAbout .follow-img { width: 390px; }
+#btnProjects .follow-img { width: 720px; }
+
+  /* ===== OVERLAY (GATEKEEPER) ===== */
+  #gatekeeper {
+    position: fixed;
+    inset: 0;
+    background-color: black;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s;
+  }
+
+  .circle-container {
+    position: relative;
+    width: 900px; 
+    height: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .circle-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .button-group {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column; 
+    gap: 20px;
+    align-items: center;
+  }
+
+  .gate-btn {
+    background: transparent;
+    border: none; 
+    color: black; 
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    cursor: pointer;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, opacity 0.2s;
+  }
+
+  .gate-btn:hover {
+    transform: scale(1.1);
+  }
+
+  #gatekeeper.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+/* ===== HINT TEXT ===== */
+  #hint-text {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffffff;
+    font-size: 1.5rem; 
+    font-weight: bold;
+    letter-spacing: 1px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100000; /* Higher than gatekeeper and container */
+    text-transform: uppercase;
+    visibility: hidden;
+  }
+
+#hint-text.visible {
+    visibility: visible;
+    /* 15s total = 5s visible + 10s waiting */
+    animation: popup-hint 20s infinite;
+  }
+
+  @keyframes popup-hint {
+    0%   { opacity: 0; transform: translate(-50%, 20px); }
+    3%   { opacity: 1; transform: translate(-50%, 0px); }  /* Fade in quick */
+    30%  { opacity: 1; transform: translate(-50%, 0px); }  /* Stay solid until ~4.5s */
+    33%  { opacity: 0; transform: translate(-50%, -10px); } /* Fade out by 5s */
+    100% { opacity: 0; }                                    /* Wait for 10 more seconds */
+  }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<div id="gatekeeper">
+  <div class="circle-container">
+    <img src="Circle.png" alt="" class="circle-bg">
+    <div class="button-group">
+      <button id="acceptBtn" class="gate-btn">ACCEPT</button>
+      <button id="declineBtn" class="gate-btn">DECLINE</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="hint-text">find the buttons</div>
+
+<div id="container">
+  <div id="imageWrap">
+    <img src="Main01.png" id="image" draggable="false">
+    <div id="btnAbout" class="follow" style="--ox:-182px; --oy:100px;">
+      <img src="Aboutme_pic.png" class="follow-img" draggable="false" data-href="aboutmetab.html">
+    </div>
+    <div id="btnInfo" class="follow" style="--ox:730px; --oy:-448px;">
+      <img src="info01.png" class="follow-img" draggable="false" data-href="contactme.html">
+    </div>
+    <div id="btnProjects" class="follow" style="--ox:670px; --oy:400px;">
+      <img src="Projects01.png" class="follow-img" draggable="false" data-href="art_projects.html">
+    </div>
+    <div id="btn00" class="follow" style="--ox:-980px; --oy:552px;">
+      <img src="button00.png" class="follow-img" draggable="false"  data-href="codeprojects.html">
+    </div>
+  </div>
+</div>
+
+<script>
+// --- BLOCK COPY/PASTE/CUT ---
+document.addEventListener('copy', (e) => e.preventDefault());
+document.addEventListener('paste', (e) => e.preventDefault());
+document.addEventListener('cut', (e) => e.preventDefault());
+
+const container = document.getElementById("container");
+const image = document.getElementById("image");
+const imageWrap = document.getElementById('imageWrap');
+const gatekeeper = document.getElementById('gatekeeper');
+const acceptBtn = document.getElementById('acceptBtn');
+const declineBtn = document.getElementById('declineBtn');
+
+// --- SESSION CHECK ---
+if (sessionStorage.getItem('overlayAccepted') === 'true') {
+    gatekeeper.style.display = 'none';
+    container.style.filter = 'none';
+}
+
+// --- OVERLAY ACTIONS ---
+acceptBtn.addEventListener('click', () => {
+  sessionStorage.setItem('overlayAccepted', 'true');
+  gatekeeper.classList.add('hidden');
+  container.style.filter = 'none';
+  
+  // TRIGGER THE TEXT HERE
+  document.getElementById('hint-text').classList.add('visible');
+});
+
+
+if (sessionStorage.getItem('overlayAccepted') === 'true') {
+    gatekeeper.style.display = 'none';
+    container.style.filter = 'none';
+    document.getElementById('hint-text').classList.add('visible');
+}
+
+declineBtn.addEventListener('click', () => {
+  window.close();
+  setTimeout(() => {
+    window.location.href = "https://www.google.com";
+  }, 100);
+});
+
+// --- NAVIGATION & DRAG LOGIC ---
+let isDragging = false;
+let startX, startY;
+let currentX = 0, currentY = 0;
+
+function getScale() {
+  return window.innerWidth <= 420 ? 1 : 0.7;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function updateTransform() {
+  const containerRect = container.getBoundingClientRect();
+  const scale = getScale();
+  const imgWidth = image.naturalWidth * scale;
+  const imgHeight = image.naturalHeight * scale;
+
+  const maxX = Math.max(0, (imgWidth - containerRect.width) / 2);
+  const maxY = Math.max(0, (imgHeight - containerRect.height) / 2);
+
+  currentX = clamp(currentX, -maxX, maxX);
+  currentY = clamp(currentY, -maxY, maxY);
+
+  imageWrap.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) scale(${scale})`;
+}
+
+container.addEventListener("mousedown", e => {
+  if (e.button !== 0) return;
+  isDragging = true;
+  container.classList.add("dragging");
+  startX = e.clientX - currentX;
+  startY = e.clientY - currentY;
+});
+
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+  container.classList.remove("dragging");
+});
+
+window.addEventListener("mousemove", e => {
+  if (!isDragging) return;
+  currentX = e.clientX - startX;
+  currentY = e.clientY - startY;
+  updateTransform();
+});
+
+container.addEventListener("touchstart", e => {
+  if (e.touches.length !== 1) return;
+  isDragging = true;
+  const touch = e.touches[0];
+  startX = touch.clientX - currentX;
+  startY = touch.clientY - currentY;
+});
+
+window.addEventListener("touchmove", e => {
+  if (!isDragging || e.touches.length !== 1) return;
+  const touch = e.touches[0];
+  currentX = touch.clientX - startX;
+  currentY = touch.clientY - startY;
+  updateTransform();
+  e.preventDefault();
+}, { passive: false });
+
+window.addEventListener("touchend", () => isDragging = false);
+window.addEventListener("resize", updateTransform);
+
+if (image.complete) updateTransform();
+else image.onload = updateTransform;
+
+['btnAbout','btnInfo','btnProjects','btn00'].forEach(id => {
+  const img = document.querySelector(`#${id} .follow-img`);
+  if (!img) return;
+  img.addEventListener('click', () => {
+    const href = img.getAttribute('data-href');
+    if (href) window.location.href = href;
+  });
+});
+</script>
+</body>
+</html>

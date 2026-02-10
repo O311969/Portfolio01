@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            cursor: none; /* Hides system cursor */
+
+            /* Prevents blue highlight/text selection */
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none;     /* IE 10 and IE 11 */
+            user-select: none;         /* Standard syntax */
+        }
+
+body {
+            background: 
+                url('backgroundpic.png') no-repeat center center fixed, 
+                url('endingback.png') no-repeat center center fixed;
+            background-size: cover;
+            /* This line below is the "magic" - it makes the top image 50% transparent */
+            background-color: rgba(0, 0, 0, 0.5); 
+            background-blend-mode: lighten; 
+
+            height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 5%; 
+            overflow: hidden;
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out, border-radius 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        #custom-cursor span {
+            display: none;
+            font-size: 10px;
+            font-weight: 900;
+            color: black;
+            text-transform: uppercase;
+        }
+
+        /* Hover State for Cursor (Oval) */
+        .hovering #custom-cursor {
+            width: 70px;
+            height: 35px;
+            border-radius: 30px;
+            background: white;
+            mix-blend-mode: normal;
+        }
+
+        .hovering #custom-cursor span {
+            display: block;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 40px;
+            left: 30px; 
+            text-decoration: none;
+            color: white;
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        /* Content */
+        .content {
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .contact-info {
+            margin-top: 40px;
+        }
+
+        .interactive-link {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            display: block;
+            width: fit-content;
+        }
+
+        .label {
+            opacity: 0.8;
+            margin-right: 10px;
+        }
+
+        /* Success Message */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: black;
+            padding: 8px 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 11px;
+            display: none;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"><span id="cursor-text">COPY</span></div>
+
+    <a href="index.html" class="back-btn interactive-link">BACK</a>
+
+    <div class="content">
+        <h1>READY FOR THE NEXT CHALLENGE.<br>
+            I'M LOOKING FOR A PLACE TO GROW AND CONTRIBUTE, HOPEFULLY WITH YOU.</h1>
+        
+        <p style="font-weight: 800; opacity: 0.8;">CONTACT ME BELOW!</p>
+
+        <div class="contact-info">
+            <div class="interactive-link" onclick="copyText('begichanna163@gmail.com')">
+                <span class="label">MAIL:</span>begichanna163@gmail.com
+            </div>
+            <div class="interactive-link" onclick="copyText('+41 76 741 48 16')">
+                <span class="label">TEL:</span>+41 76 741 48 16
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">COPIED TO CLIPBOARD</div>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        const cursorText = document.getElementById('cursor-text');
+        const body = document.body;
+
+        // Mouse follower logic
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Hover effect with dynamic text
+        const links = document.querySelectorAll('.interactive-link');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                body.classList.add('hovering');
+                // Change text based on if it's the back button or not
+                if (link.classList.contains('back-btn')) {
+                    cursorText.innerText = "BACK";
+                } else {
+                    cursorText.innerText = "COPY";
+                }
+            });
+            link.addEventListener('mouseleave', () => {
+                body.classList.remove('hovering');
+            });
+        });
+
+        // Copy logic
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById("toast");
+                toast.style.display = "block";
+                setTimeout(() => { toast.style.display = "none"; }, 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>

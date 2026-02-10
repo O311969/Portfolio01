@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About me</title>
+
+  <style>
+    /* ---------------- General Styles ---------------- */
+    html {
+      scroll-behavior: smooth;
+    }
+    html, body {
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url("backgroundpic.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+    }
+
+    /* Disable selection */
+    * {
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    img {
+      pointer-events: none;
+    }
+
+    body {
+      background-color: #000;
+      color: #fff;
+    }
+
+    /* ---------------- Header / Top Section ---------------- */
+    header {
+      position: relative;
+      height: 100vh;
+      overflow: visible;
+    }
+
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10001; /* Higher than vertical line */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: rgba(0,0,0,0.8);
+      transition: transform 0.3s ease;
+    }
+
+    .header-bar.hidden {
+      transform: translateY(-100%);
+    }
+
+    .header-bar::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .name {
+      font-size: clamp(16px, 1.2vw, 22px);
+      font-weight: 600;
+    }
+
+    .menu-links {
+      display: flex;
+      gap: 70px;
+      font-size: clamp(16px, 1vw, 20px);
+    }
+
+    .menu-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 400;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .menu-links a:hover {
+      transform: scale(1.1);
+    }
+
+    .time {
+      font-size: clamp(12px, 0.9vw, 15px);
+      opacity: 0.9;
+    }
+
+    .header-visuals {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .header-visuals img {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+
+    .about-img { top: -10%; left: -21%; transform: scale(0.65); }
+    .me-gif { bottom: -35%; right: -25%; transform: scale(0.95); }
+
+    .yearr {
+      font-size: clamp(30px, 1.2vw, 20px);
+      position: absolute;
+      top: 129%;
+      left: 88%;
+      padding-right: 5%;
+      line-height: 1.3;
+    }
+
+    .poem_one {
+      font-size: clamp(30px, 1.2vw, 20px);
+      position: absolute;
+      text-align: center;
+      top: 75%;
+      padding-left: 10%;
+      margin-right: 55%;
+      padding-right: 5%;
+      line-height: 1.3;
+    }
+
+    /* Images */
+    .myself_img { width: 22vw; height: auto; position: absolute; top: 180%; left: 63.5%; }
+    .pic_back { width: 88vw; height: auto; position: absolute; top: 170%; left: 30%; }
+    .camera_gif { width: 30vw; height: auto; position: absolute; top: 345%; left: 53%; }
+    .lines_img { width: 100vw; height: auto; display: block; position: absolute; top: 80%; }
+    
+    .text_one, .text_two, .text_three, .text_four, .text_five {
+      color: #555;
+      transition: color 0.9s linear;
+      display: inline-block;
+    }
+
+    .text_one { position: absolute; color: #ffffff; font-size: clamp(35px, 1.2vw, 20px); text-align: justify; top: 180%; margin-right: 50%; line-height: 1.3; }
+    .text_onee { font-size: clamp(35px, 1.2vw, 20px); padding-left: 14.5%; }
+    .text_onee.indent { margin-left: 100px; padding-left: 1%; }
+    .text_two { position: absolute; top: 350%; left: 5%; width: 40%; font-size: clamp(35px, 1.2vw, 20px); text-align: justify; line-height: 1.3; color: #fff; }
+    .lines_img.flipped { top: 260%; left: 0; }
+    .big_star { width: 25vw; height: auto; position: absolute; margin-bottom: 110%; margin-left: 72%; }
+    .little_star { width: 20vw; height: auto; position: absolute; top: 415%; margin-left: 44%; }
+    .liness_img { width: 100vw; height: auto; display: block; position: absolute; top: 400%; }
+    
+    .text_three { position: absolute; top: 490%; left: 5%; width: 40%; font-size: clamp(35px, 1.2vw, 20px); text-align: justify; line-height: 1.3; color: #fff; }
+    .text_four { position: absolute; top: 530%; left: 55%; width: 40%; font-size: clamp(35px, 1.2vw, 20px); text-align: justify; line-height: 1.3; color: #fff; }
+    .text_five { position: absolute; top: 585%; left: 5%; width: 40%; font-size: clamp(35px, 1.2vw, 20px); text-align: justify; line-height: 1.3; color: #fff; }
+
+    /* ///// NEW BLACK BACKGROUND BLOCK ///// */
+    .footer-bg {
+      position: absolute;
+      top: 630%; 
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #000;
+      z-index: 5; 
+    }
+
+    .vertical-line {
+      position: absolute;
+      top: 630%;
+      right: 0;
+      width: 100vw;
+      height: 2px;
+      background-color: #fff;
+      z-index: 10000;
+    }
+
+    .inspo {
+      position: absolute;
+      top: 633%;
+      white-space: nowrap;
+      font-size: clamp(80px, 10vw, 180px);
+      color: #fff;
+      transform: translateX(50vw);
+      animation: inspo-move 12s linear infinite;
+      z-index: 10;
+    }
+
+    @keyframes inspo-move {
+      0% { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .arrow-container {
+      position: absolute;
+      top: 685%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      cursor: pointer;
+    }
+    .arrow {
+      box-sizing: border-box;
+      height: 5vw;
+      width: 5vw;
+      border-style: solid;
+      border-color: white;
+      border-width: 0px 1px 1px 0px;
+      transform: rotate(-135deg);
+      transition: border-width 150ms ease-in-out;
+    }
+    .arrow:hover {
+      border-bottom-width: 4px;
+      border-right-width: 4px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1440px) {
+      .footer-bg { top: 630%; height: 100vh; }
+      .yearr { top: 116%; left: 85%; font-size: clamp(25px, 1vw, 28px); }
+      .poem_one { top: 70%; padding-left: 8%; margin-right: 50%; font-size: clamp(25px, 1vw, 28px); }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="smooth-scroll">
+    <header>
+      <div class="header-visuals">
+        <img src="ABOUT.png" alt="About" class="about-img">
+        <img src="ME.gif" alt="Me" class="me-gif">
+      </div>
+
+      <div class="header-bar" id="headerBar">
+        <div class="name">Hanna Begic</div>
+        <div class="menu-links">
+          <a href="index.html">Home</a>
+          <a href="codeprojects.html">Projects</a>
+          <a href="art_projects.html">Art Corner</a>
+        </div>
+        <div class="time" id="swissTime">Based in Switzerland (--:--)</div>
+      </div>
+
+      <div class="poem_one"><strong>I turn creativity into structure<br />and structure into experiences<br />that stay with you</strong></div>
+      <div class="yearr"><strong>2026</strong></div>
+    </header>
+
+    <main>
+      <div style="height: 200vh;"></div>
+    </main>
+
+    <div><img src="Lines_two.png" alt="Lines" class="lines_img"></div>
+    <div><img src="Camera.gif" alt="Camera" class="camera_gif"></div>
+
+    <div class="text_design">
+      <div class="text_one" >
+        <p class="text_onee">I’m Hanna Begic.</p>
+        <p class="text_onee indent">Over the past year, I’ve been developing my technical skills by working with programming languages such as JavaScript, HTML, CSS, and C++. I enjoy building things from the ground up and combining logical problem-solving with creative expression, often integrating artistic elements into my projects including this website itself to create thoughtful and meaningful experiences.</p>
+      </div>
+      <div class="text_two">
+        I grew up in Austria and moved to Switzerland two years ago, a change that helped shape my perspective and independence. 
+        On a personal level, I tend to open up gradually and can be reserved at first, which I see as both a challenge and a strength. While I may not always be the most outspoken in the beginning, I am observant, focused, and attentive to details.
+      </div>
+    </div>
+
+    <div>
+      <img src="Picback .png" alt="Pic_back" class="pic_back">
+      <img src="myself.jpeg" alt="myself" class="myself_img">
+    </div>
+    <div><img src="Lines.png" alt="Lines two" class="lines_img flipped"></div>
+    <img src="Big star.png" alt="Little Star" class="big_star">
+    <img src="Little Star.png" alt="Little Star" class="little_star">
+    <div><img src="Lines_two.png" alt="Lines" class="liness_img"></div>
+
+    <div class="text_three">Once I feel comfortable, I become engaged, motivated, and confident in sharing ideas and taking responsibility.</div>
+    <div class="text_four">• creative thinking and a strong sense for design • dedication, focus, and attention to detail • a willingness to learn and grow through new challenges • reliability and commitment to doing my best work</div>
+    <div class="text_five">I’m excited to gain experience in a supportive, collaborative environment where I can continue developing both personally and professionally.</div>
+
+    <div class="footer-bg"></div>
+    <div class="vertical-line"></div>
+
+    <div class="inspo">curious, creating, becoming</div>
+
+    <div class="arrow-container">
+      <div class="arrow" id="scrollUpArrow"></div>
+    </div>
+  </div>
+
+  <script>
+
+    // Disable copy, cut, paste
+  document.addEventListener('copy', e => e.preventDefault());
+  document.addEventListener('cut', e => e.preventDefault());
+  document.addEventListener('paste', e => e.preventDefault());
+
+  // Disable text dragging
+  document.addEventListener('dragstart', e => e.preventDefault());
+
+
+  // Disable common copy shortcuts
+  document.addEventListener('keydown', e => {
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      ['c', 'x', 'v', 'a', 's', 'u'].includes(e.key.toLowerCase())
+    ) {
+      e.preventDefault();
+    }
+  });
+
+    // Update Swiss time
+    function updateSwissTime() {
+      const now = new Date();
+      const timeString = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Zurich',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }).format(now);
+
+      document.getElementById('swissTime').textContent =
+        `Based in Switzerland (${timeString})`;
+    }
+
+    updateSwissTime();
+    setInterval(updateSwissTime, 1000);
+
+    // Scroll hide/show header
+    let lastScroll = 0;
+    const header = document.getElementById('headerBar');
+    const delta = 5;
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScroll = window.scrollY;
+
+          if (Math.abs(currentScroll - lastScroll) > delta) {
+            if (currentScroll > lastScroll) {
+              header.classList.add('hidden');
+            } else {
+              header.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+          }
+
+          ticking = false;
+        });
+
+        ticking = true;
+      }
+    });
+
+// Ensure page starts at top on reload
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+};
+
+// Wrap every letter in a span
+function wrapLetters(textElement) {
+  const text = textElement.textContent;
+  textElement.innerHTML = '';
+  for (let char of text) {
+    const span = document.createElement('span');
+    span.textContent = char;
+    textElement.appendChild(span);
+  }
+}
+
+// Apply to both text blocks
+const texts = document.querySelectorAll('.text_onee.indent, .text_two, .text_three, .text_four, .text_five');
+texts.forEach(wrapLetters);
+
+// Helper: check if element is visible
+function isElementVisible(el) {
+  const rect = el.getBoundingClientRect();
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  // Start reveal when the top of element is 90% from top (earlier)
+  return rect.top < windowHeight * 0.9 && rect.bottom > 0;
+}
+
+// Scroll-triggered fast letter-by-letter reveal
+window.addEventListener('scroll', () => {
+  texts.forEach(text => {
+    if (isElementVisible(text)) {
+      const spans = text.querySelectorAll('span');
+      const rect = text.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // visiblePercent scaled faster: multiply by factor (2 = faster)
+      let visiblePercent = ((windowHeight - rect.top) / (rect.height + windowHeight)) * 2;
+      visiblePercent = Math.min(Math.max(visiblePercent, 0), 1); // clamp 0 → 1
+
+      spans.forEach((span, index) => {
+        const revealThreshold = index / spans.length;
+        if (visiblePercent > revealThreshold) {
+          span.style.color = '#fff'; // fade to white
+        } else {
+          span.style.color = '#555'; // dark grey
+        }
+      });
+    }
+  });
+});
+
+/* ---------------- Smooth Custom Scroll ---------------- */
+
+
+// Keep the scroll-up arrow logic, but use the browser's native smooth behavior
+const scrollUpArrow = document.getElementById('scrollUpArrow');
+
+if (scrollUpArrow) {
+  scrollUpArrow.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // This gives a clean, non-buggy glide back to the top
+    });
+  });
+}
+
+  </script>
+
+</body>
+</html>

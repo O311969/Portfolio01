@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | My Projects</title>
+    <link rel="stylesheet" href="codeproject.css">
+    
+    <style>
+        /* ===== PROTECTION STYLES ===== */
+        html, body {
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+        }
+
+        /* ===== LAYOUT & BACKGROUND ===== */
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .left-section {
+            flex: 1;
+            background-image: url('backgroundpic.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .main-title {
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .project-card img, .placeholder {
+            pointer-events: none;
+            -webkit-user-drag: none;
+        }
+
+        .nav-item {
+            pointer-events: auto;
+        }
+
+        /* ===== CUSTOM CURSOR ===== */
+        #custom-cursor {
+            position: fixed;
+            width: 60px;
+            height: 30px;
+            background-color: white;
+            color: black;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 999999;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+
+        .project-card {
+            cursor: none !important;
+        }
+
+        .project-card:hover ~ #custom-cursor, 
+        .project-list:has(.project-card:hover) + #custom-cursor,
+        body:has(.project-card:hover) #custom-cursor {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* ===== PROJECT OVERLAY & SCROLLING ===== */
+        #project-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: black;
+            z-index: 2000000; 
+            display: none; 
+            padding: 80px 10%; 
+            box-sizing: border-box;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        body.project-open {
+            overflow: hidden;
+        }
+
+        #back-btn {
+            position: fixed; 
+            top: 30px;
+            right: 50px;
+            background: transparent;
+            border: 2px solid white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: lowercase;
+            transition: all 0.2s ease;
+            z-index: 2000001;
+        }
+
+        #back-btn:hover {
+            background-color: white;
+            color: black;
+            transform: scale(1.1);
+        }
+
+        body.project-open #custom-cursor {
+            display: none !important;
+        }
+
+        /* Project Content Styling */
+        #project-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #viewing-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            color: white;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Image Containers */
+        .visual-display {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .showcase-main {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .showcase-secondary {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        /* Project Text Detail Styles */
+        .project-details-section {
+            margin-bottom: 60px;
+        }
+
+        .project-details-section h2 {
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .project-details-section p {
+            line-height: 1.8;
+            font-size: 1.15rem;
+            color: #d1d1d1;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 25px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+
+        .feature-list strong {
+            color: white;
+            display: block;
+            font-size: 1.25rem;
+            margin-bottom: 5px;
+        }
+
+        .feature-list span {
+            color: #d1d1d1;
+            line-height: 1.6;
+            display: block;
+        }
+
+        /* Code Cards */
+        .image-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .white-block {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #dcdcdc;
+            transition: all 0.3s ease;
+        }
+
+        .code-header {
+            background: #2d2d2d;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-family: monospace;
+            border-bottom: 1px solid #333;
+            color: #ffffff;
+        }
+
+        .code-snippet {
+            padding: 20px;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            color: #9f9f9f;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .white-block:hover {
+            border-color: #ffffff;
+            transform: translateY(-10px);
+        }
+
+        .gallery-row { display: flex; gap: 20px; }
+        .white-block.large { width: 100%; }
+        .white-block.small { flex: 1; }
+
+        .project-split-layout {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 60px;
+    align-items: flex-start;
+}
+
+.project-left-col {
+    flex: 1.5; 
+}
+
+.project-right-col {
+    flex: 1; 
+}
+
+.project-right-col .showcase-secondary {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+/* Responsive fix: stack on small screens */
+@media (max-width: 800px) {
+    .project-split-layout {
+        flex-direction: column;
+    }
+}
+
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="container">
+        <div class="left-section">
+            <div class="title-wrapper">
+                <h1 class="main-title">MY<br>PROJECTS</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="aboutmetab.html" class="nav-item">About Me</a>
+                <a href="art_projects.html" class="nav-item">Art Corner</a>
+            </nav>
+        </div>
+
+        <div id="custom-cursor">view</div>
+
+        <div class="right-section">
+            <div class="project-list">
+                <div class="project-card"><div class="placeholder"></div><p>Project 1</p></div>
+                <div class="project-card"><div class="placeholder"></div><p>Project 2</p></div>
+                <div class="project-card"><div class="placeholder"></div><p>Project 3</p></div>
+                <div class="project-card"><div class="placeholder"></div><p>Project 4</p></div>
+            </div>
+        </div>
+    </div>
+
+<div id="project-overlay">
+    <button id="back-btn">back</button>
+    
+<div id="project-content">
+<div id="flower-project-data" style="display: none;">
+<h1 id="viewing-title">VIEWING: PROJECT 1</h1>
+
+<div class="visual-display">
+<img src="firstproject_one.png" alt="Main Project View" class="showcase-main">
+</div>
+                
+        <div class="project-details-section">
+            <h2>The Concept: Art in Motion</h2>
+            <p>This project is my debut portfolio, but I wanted to avoid the feel of a standard corporate resume. Instead, I envisioned it as an <strong>interactive sketchbook</strong>. My goal was to bridge the gap between my traditional art background and my new path in programming, creating a digital space that feels hand crafted and personal.</p>
+        </div>
+
+        <div class="visual-display">
+            <div class="showcase-grid">
+                <img src="firstproject_two.png" alt="Detail View One" class="showcase-secondary">
+                <img src="firstproject_three.png" alt="Detail View Two" class="showcase-secondary">
+            </div>
+        </div>
+
+        <div class="project-details-section">
+            <h2>Hand-Drawn & Hand-Coded</h2>
+            <ul class="feature-list">
+                <li>
+                    <strong>Original Illustrations</strong>
+                    <span>Every visual element from the character mascots to the UI buttons was hand drawn by me to ensure the site is a true reflection of my artistic style.</span>
+                </li>
+                <li>
+                    <strong>Animated Nodes</strong>
+                    <span>I replaced standard menus with custom frame-by-frame GIFs of "flowers," creating a discovery based navigation experience.</span>
+                </li>
+                <li>
+                    <strong>Signature Style</strong>
+                    <span>This project allowed me to merge my passion for drawing with my interest in digital editing, establishing a unique visual language for my first digital home.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="project-details-section">
+            <h2>The Developer’s Journey & Learning Curves</h2>
+            <p>Building this was my first experience diving deep into HTML, CSS, and JavaScript. While the drawing phase was where I felt most at home, the technical execution provided a rewarding challenge:</p>
+            <ul class="feature-list">
+                <li>
+                    <strong>The Struggle with Relatives</strong>
+                    <span>A major hurdle was mastering relative positioning. Trying to make hand-drawn art sit "just right" in a digital layout was a steep learning curve that I am still refining.</span>
+                </li>
+                <li>
+                    <strong>Pursuing Responsiveness</strong>
+                    <span>Making a "sketchbook" feel perfect on every screen size is complex. While I am still working toward making the responsiveness perfect, this project represents a massive leap in my understanding of CSS logic.</span>
+                </li>
+                <li>
+                    <strong>Focus & Depth</strong>
+                    <span>I implemented a JavaScript system that applies CSS blur filters to the background when an overlay is open, mimicking a camera’s "depth of field" to keep the focus on my art and text.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="image-gallery">
+            <div class="white-block large">
+                <div class="code-header"><span>Logic: Dynamic Asset Handling</span></div>
+                <pre class="code-snippet">
+function showOverlay(overlayId, flowerImage) {
+    const overlay = document.getElementById(overlayId);
+    overlay.classList.add('visible');
+    
+    flowerButtons.forEach(buttonId => {
+        const flowerImg = document.getElementById(buttonId).querySelector('img');
+        flowerImg.classList.add('blurred'); // Creates Depth of Field
+    });
+}</pre>
+            </div>
+
+            <div class="gallery-row">
+                <div class="white-block small">
+                    <div class="code-header"><span>State Management</span></div>
+                    <pre class="code-snippet mini">
+if (audioWeb.src.includes('AudioWEB.png')) {
+    audioWeb.src = 'NoAudio.png';
+    isMuted = true;
+}</pre>
+                </div>
+                <div class="white-block small">
+                    <div class="code-header"><span>Interactive Feedback</span></div>
+                    <pre class="code-snippet mini">
+button.addEventListener('mouseenter', () => {
+    flowerImage.style.animation = 'none';
+    flowerImage.style.transform = 'scale(1.1)';
+});</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-details-section">
+            <h2>My Growth & Future Vision</h2>
+            <p>This project is more than just a website, it’s a milestone in my journey of self teaching. It represents the moment I stopped just drawing worlds and started building the logic behind them. By tackling everything from state management to audio integration for the first time, I’ve laid the foundation for my ultimate goal: <strong>creating my own games</strong>. This is just the beginning of my path as a creative developer.</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="moon-project-data" style="display: none;">
+    <h1 id="viewing-title">VIEWING: PROJECT 3</h1>
+
+    <div class="visual-display">
+        <img src="thirdproject_one.png" alt="Main Project View" class="showcase-main">
+    </div>
+
+    <div class="project-details-section">
+        <h2>The Moon Landing</h2>
+        <p>This project served as a personal challenge to bridge the gap between hand-drawn digital art and programmatic animation. The goal was to build an immersive experience using only the core web technologies I've mastered, ensuring the logic was as clean as the visual design.</p>
+    </div>
+
+    <div class="project-split-layout">
+        <div class="project-left-col">
+            <div class="project-details-section">
+                <h2>1. Custom Asset Integration (The Moon)</h2>
+                <p>The centerpiece of this project is a hand-drawn moon asset. I used CSS to wrap this image in a "glowing ball" container, utilizing border-radius and box-shadow animations to give the art a digital "pulse."</p>
+            </div>
+
+            <div class="project-details-section">
+                <h2>2. Procedural Animation with JavaScript</h2>
+                <p>I wrote a JavaScript function, createStar(), to handle procedural generation:</p>
+                <ul class="feature-list">
+                    <li><strong>Dynamic Positioning</strong> <span>Calculates screen width and height to place stars randomly.</span></li>
+                    <li><strong>Memory Management</strong> <span>Uses setTimeout to remove stars after 5 seconds, preventing lag.</span></li>
+                </ul>
+            </div>
+
+            <div class="project-details-section">
+                <h2>4. Keyframe Orchestration</h2>
+                <p>The atmosphere is driven by four distinct @keyframes sets:</p>
+                <ul class="feature-list">
+                    <li><strong>glowing:</strong> <span>Controls the moon's inner light.</span></li>
+                    <li><strong>fadeInOut:</strong> <span>Manages the "Click Me" hint visibility.</span></li>
+                    <li><strong>twinkle & glow:</strong> <span>Creates the rhythmic pulsing of the starfield.</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="project-right-col">
+            <img src="thirdproject_two.png" alt="Moon Detail" class="showcase-secondary">
+            
+            <div class="project-details-section" style="margin-top: 40px;">
+                <h2>3. State Management & Interaction</h2>
+                <p>I handled the transition through a custom openMainPage() function:</p>
+                <ul class="feature-list">
+                    <li><strong>Scaling Logic</strong> <span>Triggers a scale(5) transform for a "zoom" effect.</span></li>
+                    <li><strong>Flag Logic</strong> <span>Uses a boolean variable to prevent multiple clicks.</span></li>
+                    <li><strong>Interval Clearing</strong> <span>Uses clearInterval to clean up background processes.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="white-block large">
+        <div class="code-header"><span>Logic: Procedural Star Generation</span></div>
+        <pre class="code-snippet">
+function createStar() {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = `${Math.random() * window.innerWidth}px`;
+    star.style.top = `${Math.random() * window.innerHeight}px`;
+    document.body.appendChild(star);
+    setTimeout(() => { star.remove(); }, 5000);
+}</pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div id="calculator-project-data" style="display: none;">
+    <h1 id="viewing-title">VIEWING: PROJECT 4</h1>
+
+    <div class="visual-display">
+        <img src="fourthproject_one.png" alt="Calculator App Interface" class="showcase-main">
+    </div>
+
+    <div class="project-details-section">
+        <h2>Logic & Calculation</h2>
+        <p>This project was my first venture into handling <strong>real-time user input</strong>. While the design is minimalist, the core challenge was ensuring that the mathematical logic translated correctly from button clicks to the display area.</p>
+    </div>
+
+    <div class="project-split-layout">
+        <div class="project-left-col">
+            <div class="project-details-section">
+                <h2>1. The DOM & Append Logic</h2>
+                <p>I utilized a modular JavaScript function, appendOperation(), to interact with the Document Object Model (DOM). Instead of hardcoding every button, this function dynamically updates the 'resultArea' whenever a user interacts with the keypad.</p>
+            </div>
+
+            <div class="project-details-section">
+                <h2>2. Mathematical Evaluation</h2>
+                <p>For the processing engine, I implemented the <strong>eval()</strong> method. This allowed the application to interpret strings as mathematical expressions, handling complex order-of-operations automatically.</p>
+                <ul class="feature-list">
+                    <li><strong>Efficient Syntax</strong> <span>By treating the display content as a string, I reduced the need for multiple temporary variables.</span></li>
+                    <li><strong>Instant Feedback</strong> <span>The result is calculated and rendered immediately upon pressing the '=' key.</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="project-right-col">
+            <img src="fourthproject_two.png" alt="Keypad Detail" class="showcase-secondary">
+            
+            <div class="project-details-section" style="margin-top: 40px;">
+                <h2>3. UI Design with Table Layouts</h2>
+                <p>I used a semantic <strong>HTML Table</strong> structure to ensure a perfectly aligned grid. This was a key exercise in mastering structural CSS, specifically focusing on:</p>
+                <ul class="feature-list">
+                    <li><strong>Hover States</strong> <span>Interactive feedback through color shifts (rgb 20 to 30).</span></li>
+                    <li><strong>Visual Hierarchy</strong> <span>Using 'highlight' classes for operators to distinguish them from numbers.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="white-block large">
+        <div class="code-header"><span>JavaScript: Logic & Result Handling</span></div>
+        <pre class="code-snippet">
+function calcResult() {
+    let container = document.getElementById('resultArea');
+    let result = eval(container.innerHTML); 
+    // Uses eval for string-to-math conversion
+    container.innerHTML = result;
+}</pre>
+    </div>
+</div>
+
+
+<div id="coming-soon-data" style="display: none;">
+                <h1 style="color: white; text-align: center; margin-top: 20%; font-size: 3rem; letter-spacing: 5px;">COMING SOON</h1>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const cursor = document.getElementById('custom-cursor');
+    const projectCards = document.querySelectorAll('.project-card');
+    const overlay = document.getElementById('project-overlay');
+    const backBtn = document.getElementById('back-btn');
+    const flowerData = document.getElementById('flower-project-data');
+    const soonData = document.getElementById('coming-soon-data');
+    const moonData = document.getElementById('moon-project-data');
+    const calculatorData = document.getElementById('calculator-project-data');
+
+    // Smooth custom cursor movement
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+
+    projectCards.forEach(card => {
+        card.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+        card.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+        
+        card.addEventListener('click', () => {
+            // We use .trim() to remove accidental spaces and .toUpperCase() to avoid typos
+            const projectName = card.querySelector('p').innerText.trim().toUpperCase();
+            
+            // Hide everything first
+            flowerData.style.display = 'none';
+            moonData.style.display = 'none';
+            calculatorData.style.display = 'none';
+            soonData.style.display = 'none';
+
+            // Check if it's Project 1
+            if (projectName === "PROJECT 1") {
+                flowerData.style.display = 'block';
+            } else if (projectName === "PROJECT 3") {
+                moonData.style.display = 'block';
+            } else if (projectName === "PROJECT 4") {
+            calculatorData.style.display = 'block'; // Trigger Calculator
+            }
+            else {
+                // All other projects show "Coming Soon"
+                soonData.style.display = 'block';
+            }
+            
+
+            // Show the overlay
+            overlay.style.display = 'block';
+            document.body.classList.add('project-open');
+            overlay.scrollTop = 0;
+        });
+    });
+
+    // Back button logic
+    backBtn.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        document.body.classList.remove('project-open');
+    });
+
+    // Security: disable copy
+    document.addEventListener('copy', (e) => e.preventDefault());
+</script>
+</body>
+</html>
